@@ -18,5 +18,11 @@ return [
             'driver' => 'eloquent',
             'model' => \App\User::class
         ]
-    ]
+        ],
+        'disks' => [
+
+            'local' => [
+                'driver' => 'local',
+                'root'   => storage_path('app'),
+            ],
 ];

@@ -25,5 +25,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('users/{id}', 'UserController@singleUser');
     $router->get('users', 'UserController@allUsers');
     $router->get('findbyemail', 'UserController@emailUser');
+    $router->get('profile/{userid}','UserController@getProfile');
+    
     
 });

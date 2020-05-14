@@ -64,7 +64,6 @@ class AuthController extends Controller
 
     public function uploadProfile(Request $request) {
         $this->validate($request, array(
-            'email' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
           ));
           //save the data to the database
@@ -85,28 +84,5 @@ class AuthController extends Controller
         return response()->json(['message' => 'Upload File Success!'], 200);
      }
     
-
-     public function store(Request $request)
-    {
-      $this->validate($request, array(
-        'email' => 'required',
-        'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-      ));
-      //save the data to the database
-        $profile  = new Profile ;
-        $profile->email = $request->email;
-
-        if($request->hasFile('image')){
-          $image = $request->file('image');
-          $filename = time() . '.' . $image->getClientOriginalExtension();
-          Image::make($image)->resize(300, 300)->save( base_path().'/public/images' . $filename  );
-          $profile->img_location = $filename;
-          $profile->save();
-        };
-
-      $profile->save();
-
-      response()->json(['profile' =>  Profile::all()], 200);
-    }
      
 }

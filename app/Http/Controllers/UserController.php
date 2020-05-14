@@ -2,7 +2,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+
 use  App\User;
+use  App\Profile;
 
 class UserController extends Controller
 {
@@ -66,6 +68,31 @@ class UserController extends Controller
              return response()->json(['message' => 'user not found!'], 404);
           }
    } 
+
+   /**
+     * Get one user.
+     *
+     * @return Response
+     */
+    public function getProfile($userid)
+    {
+        try {
+            $profile = Profile::Where('userid',$userid)->latest('created_at')->first();
+            $path=url('/').'/public/images/'. $profile->img_location;
+            if (file_exists($path)) {
+                $file = file_get_contents($path);
+                return response($file, 200)->header('Content-Type', 'image/jpg');
+              }
+            //return response()->make(file_get_contents($path), 200, [
+              //'Content-Type' => Storage::mimeType($profile->img_location),
+             // 'Content-Disposition' => 'inline; '.$profile->img_location,]);
+
+        } catch (\Exception $e) {
+
+            return response()->json(['message' => 'Profile image not found!'], 404);
+        }
+
+    }   
    
 }
 

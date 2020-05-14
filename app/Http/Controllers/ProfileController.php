@@ -16,30 +16,24 @@ class ProfileController extends Controller
         $this->middleware('auth');
     }
 
-    
-    public function store(Request $request)
+    /**
+     * Get one user.
+     *
+     * @return Response
+     */
+    public function getProfile($email)
     {
-      $this->validate($request, array(
-        'email' => 'required',
-        'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-      ));
-      //save the data to the database
-        $profile  = new Profile ;
-        $profile->email = $request->email;
+        try {
+            $profile = Profile::Where('email',$email)->latest('created_at')->first();;
 
-        if($request->hasFile('image')){
-          $image = $request->file('image');
-          $filename = time() . '.' . $image->getClientOriginalExtension();
-          Image::make($image)->resize(300, 300)->save( base_path().'/public/images' . $filename  );
-          $profile->img_location = $filename;
-          $profile->save();
-        };
+            return response()->json(['profile' => $profile], 200);
 
-      $profile->save();
+        } catch (\Exception $e) {
 
-      response()->json(['profile' =>  Profile::all()], 200);
-    }
-   
+            return response()->json(['message' => 'Profile image not found!'], 404);
+        }
+
+    }   
 }
 
 
