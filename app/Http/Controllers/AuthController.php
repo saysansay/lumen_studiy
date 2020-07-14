@@ -77,12 +77,26 @@ class AuthController extends Controller
             return response()->json(['invalid_file_upload'], 400);
         }
         
-        $path = base_path().'/public/images';
+        
+        $path = storage_path('app');
+
         $file->move($path, $file->getClientOriginalName());
         $profile->img_location =$file->getClientOriginalName();
         $profile->save();
         return response()->json(['message' => 'Upload File Success!'], 200);
      }
-    
+     
+     public function get_image($name)
+     {
+         $path = storage_path('app') . '/' . $name;
+     if (file_exists($path)) {
+           $file = file_get_contents($path);
+           return response($file, 200)->header('Content-Type', 'image/jpeg');
+         }
+     $res['success'] = false;
+         $res['message'] = "Image not found";
+         
+         return $res;
+     }
      
 }

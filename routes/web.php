@@ -26,6 +26,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('users', 'UserController@allUsers');
     $router->get('findbyemail', 'UserController@emailUser');
     $router->get('profile/{userid}','UserController@getProfile');
-    
+    $app->get('/profile/{name}', 'AuthController@get_image');
+    $app->get('getstorage', function ()    {
+         return   "uprit";
+    });
     
 });
